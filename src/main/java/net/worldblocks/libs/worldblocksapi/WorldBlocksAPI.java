@@ -23,23 +23,6 @@ public final class WorldBlocksAPI extends JavaPlugin {
     @Override
     public void onEnable() {
         instantiateDefaultModules();
-
-        ItemStack itemStack = new ItemStack(Material.BOOK);
-        itemStack.setAmount(45);
-        ItemMeta itemMeta = itemStack.getItemMeta();
-        itemMeta.addEnchant(Enchantment.ARROW_DAMAGE, 1, true);
-        itemMeta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
-        List<String> lore = new ArrayList<>();
-        lore.add("Epic Memes");
-        itemMeta.setLore(lore);
-        itemMeta.setDisplayName("Epic Memes #2");
-        itemStack.setItemMeta(itemMeta);
-        itemStack = NBTEditor.set(itemStack, 2, "awesome!");
-
-        System.out.println(SerializationUtils.serializeItem(itemStack));
-
-        ItemStack deserialized = SerializationUtils.deserializeItem(SerializationUtils.serializeItem(itemStack));
-        System.out.println(deserialized);
     }
 
     public Module getModuleGeneric(Modules id) {
