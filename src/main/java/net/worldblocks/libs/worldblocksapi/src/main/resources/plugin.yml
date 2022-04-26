@@ -1,7 +1,0 @@
-name: WorldBlocksAPI
-version: '${project.version}'
-main: net.worldblocks.libs.worldblocksapi.WorldBlocksAPI
-api-version: 1.18
-authors: [ Baguette, CandyDev, CodePunisher ]
-description: An all-in-one API for Worldblocks spigot plugins.
-website: www.worldblocks.net
