@@ -1,28 +1,41 @@
 package net.worldblocks.libs.worldblocksapi;
 
-import net.worldblocks.libs.worldblocksapi.databases.DatabaseModule;
-import net.worldblocks.libs.worldblocksapi.utilities.NBTEditor;
-import net.worldblocks.libs.worldblocksapi.utilities.SerializationUtils;
+import lombok.Getter;
+import net.worldblocks.libs.worldblocksapi.databases.*;
+import net.worldblocks.libs.worldblocksapi.redis.RedisModule;
 import org.bukkit.Bukkit;
-import org.bukkit.Material;
-import org.bukkit.enchantments.Enchantment;
-import org.bukkit.inventory.ItemFlag;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public final class WorldBlocksAPI extends JavaPlugin {
 
     private Map<Modules, Module> modules = new HashMap<>();
+    @Getter private String serverName;
 
     @Override
     public void onEnable() {
+        saveDefaultConfig();
+
+        serverName = getConfig().getString("server-name");
+        if (serverName == null || serverName.equalsIgnoreCase("unnamed")) {
+            Bukkit.getLogger().severe(" ");
+            Bukkit.getLogger().severe(" ");
+            Bukkit.getLogger().severe(" ");
+            Bukkit.getLogger().severe(" ");
+            Bukkit.getLogger().severe("[WorldblocksAPI] You must insert a name for your server to use in redis.");
+            Bukkit.getLogger().severe(" ");
+            Bukkit.getLogger().severe(" ");
+            Bukkit.getLogger().severe(" ");
+            Bukkit.getLogger().severe(" ");
+            Bukkit.shutdown();
+            return;
+        }
+
         instantiateDefaultModules();
+        getRedisModule().instantiate(this);
+
     }
 
     public Module getModuleGeneric(Modules id) {
@@ -36,6 +49,7 @@ public final class WorldBlocksAPI extends JavaPlugin {
 
     public void instantiateDefaultModules() {
         instantiateModule(Modules.DATABASES, new DatabaseModule());
+        instantiateModule(Modules.REDIS, new RedisModule());
     }
 
     public static WorldBlocksAPI getAPI() {
@@ -43,7 +57,11 @@ public final class WorldBlocksAPI extends JavaPlugin {
     }
 
     public DatabaseModule getDatabaseModule() {
-        return (DatabaseModule) modules.get("database");
+        return (DatabaseModule) modules.get(Modules.DATABASES);
+    }
+
+    public RedisModule getRedisModule() {
+        return (RedisModule) modules.get(Modules.REDIS);
     }
 
 }

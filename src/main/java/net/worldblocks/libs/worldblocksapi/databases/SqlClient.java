@@ -11,7 +11,7 @@ import java.util.List;
 
 public class SqlClient {
 
-    private Plugin plugin;
+    @Getter private Plugin plugin;
     @Getter private String ip;
     @Getter private String dbName;
     @Getter private String user;
@@ -133,6 +133,16 @@ public class SqlClient {
     }
 
     /*
+    Deletes a specific primary key from a table (w/ requirements).
+     */
+    public void deleteData(String table, PostgresRequirement... requirement) {
+        DeleteBuilder builder = new DeleteBuilder(table, requirement);
+        String query = builder.build();
+        System.out.println(query);
+        sendUpdateSync(query);
+    }
+
+    /*
     Fetch a single datapoint from a table.
      */
     public List<String> fetchData(String table, String id, PostgresRequirement... requirements) {
@@ -186,8 +196,8 @@ public class SqlClient {
 
     public void sendUpdateSync(String update) {
         try {
-            Statement statement = connection.createStatement();
-            statement.executeUpdate(update);
+            PreparedStatement statement = connection.prepareStatement(update);
+            statement.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -195,8 +205,8 @@ public class SqlClient {
 
     public ResultSet sendQuerySync(String query) {
         try {
-            Statement statement = connection.createStatement();
-            ResultSet resultSet = statement.executeQuery(query);
+            PreparedStatement statement = connection.prepareStatement(query);
+            ResultSet resultSet = statement.executeQuery();
             return resultSet;
         } catch (SQLException e) {
             e.printStackTrace();

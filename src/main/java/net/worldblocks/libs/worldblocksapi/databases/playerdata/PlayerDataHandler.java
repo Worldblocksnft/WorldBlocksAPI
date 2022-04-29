@@ -86,4 +86,37 @@ public class PlayerDataHandler {
         return true;
     }
 
+    public boolean deletePlayerData(Player player) {
+        try {
+            if (cacheMap.containsKey(player.getUniqueId())) {
+                cacheMap.remove(player.getUniqueId());
+            }
+            sqlClient.deleteData(table, "uuid", player.getUniqueId().toString());
+        } catch (Exception e) {
+            return false;
+        }
+
+        return true;
+    }
+
+    public boolean deletePlayerData(UUID uuid) {
+        try {
+            if (cacheMap.containsKey(uuid)) {
+                cacheMap.remove(uuid);
+            }
+            sqlClient.deleteData(table, "uuid", uuid.toString());
+        } catch (Exception e) {
+            return false;
+        }
+
+        return true;
+    }
+
+    /*
+    Use this if you want to force the cache to reload all data points.
+     */
+    public void invalidateCache() {
+        cacheMap.clear();
+    }
+
 }
