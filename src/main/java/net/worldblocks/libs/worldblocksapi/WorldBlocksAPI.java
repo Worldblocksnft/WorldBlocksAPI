@@ -1,6 +1,7 @@
 package net.worldblocks.libs.worldblocksapi;
 
 import lombok.Getter;
+import net.worldblocks.libs.worldblocksapi.bungee.BungeeHandler;
 import net.worldblocks.libs.worldblocksapi.command.AbstractCommand;
 import net.worldblocks.libs.worldblocksapi.configuration.Serialization;
 import net.worldblocks.libs.worldblocksapi.databases.*;
@@ -20,11 +21,15 @@ public final class WorldBlocksAPI extends JavaPlugin {
     @Getter
     private String serverName;
 
+    @Getter
+    private BungeeHandler bungeeHandler;
+
     @Override
     public void onEnable() {
         saveDefaultConfig();
         Serialization.register(Item.class);
         serverName = getConfig().getString("server-name");
+        this.bungeeHandler = new BungeeHandler();
         if (serverName == null || serverName.equalsIgnoreCase("unnamed")) {
             Bukkit.getLogger().severe(" ");
             Bukkit.getLogger().severe(" ");
