@@ -2,6 +2,7 @@ package net.worldblocks.libs.worldblocksapi.utilities;
 
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.TextComponent;
+import org.bukkit.ChatColor;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -12,6 +13,10 @@ public class ColorUtils {
     private static Pattern fix3 = Pattern.compile("\\&x[\\&0-9a-fA-F]{12}");
     private static Pattern gradient1 = Pattern.compile("<#[0-9a-fA-F]{6}>[^<]*</#[0-9a-fA-F]{6}>");
     private static Pattern gradient2 = Pattern.compile("\\{#[0-9a-fA-F]{6}>\\}[^\\{]*\\{#[0-9a-fA-F]{6}<\\}");
+
+    public static String spigotColor(String string) {
+        return ChatColor.translateAlternateColorCodes('&', string);
+    }
 
     private static String toChatColor(String hexCode) {
         StringBuilder magic = new StringBuilder("§x");
@@ -90,7 +95,7 @@ public class ColorUtils {
             String format = m.group();
             TextColor start = new TextColor(Integer.parseInt(format.substring(2, 8), 16));
             String message = format.substring(9, format.length() - 10);
-            TextColor end = new TextColor(Integer.parseInt(format.substring(format.length()-7, format.length()-1), 16));
+            TextColor end = new TextColor(Integer.parseInt(format.substring(format.length() - 7, format.length() - 1), 16));
             String applied = asGradient(start, message, end);
             text = text.replace(format, applied);
         }
@@ -104,7 +109,7 @@ public class ColorUtils {
             String format = m.group();
             TextColor start = new TextColor(Integer.parseInt(format.substring(2, 8), 16));
             String message = format.substring(10, format.length() - 10);
-            TextColor end = new TextColor(Integer.parseInt(format.substring(format.length()-8, format.length()-2), 16));
+            TextColor end = new TextColor(Integer.parseInt(format.substring(format.length() - 8, format.length() - 2), 16));
             String applied = asGradient(start, message, end);
             text = text.replace(format, applied);
         }
@@ -129,6 +134,7 @@ public class ColorUtils {
         public int r;
         public int g;
         public int b;
+
         public TextColor(int hexColor) {
             this.r = (hexColor >> 16) & 0xFF;
             this.g = (hexColor >> 8) & 0xFF;
