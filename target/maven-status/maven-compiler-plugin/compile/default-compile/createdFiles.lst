@@ -50,4 +50,5 @@ net\worldblocks\libs\worldblocksapi\command\AbstractSubCommand.class
 net\worldblocks\libs\worldblocksapi\redis\RedisModule.class
 net\worldblocks\libs\worldblocksapi\databases\builders\InsertBuilder.class
 net\worldblocks\libs\worldblocksapi\Module.class
+net\worldblocks\libs\worldblocksapi\location\LocationWrapper.class
 net\worldblocks\libs\worldblocksapi\utilities\NBTEditor.class
