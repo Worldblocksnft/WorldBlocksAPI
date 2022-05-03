@@ -7,11 +7,17 @@ import net.worldblocks.libs.worldblocksapi.configuration.Serialization;
 import net.worldblocks.libs.worldblocksapi.databases.*;
 import net.worldblocks.libs.worldblocksapi.item.Item;
 import net.worldblocks.libs.worldblocksapi.redis.RedisModule;
+import net.worldblocks.libs.worldblocksapi.server.Server;
+import net.worldblocks.libs.worldblocksapi.utilities.Pair;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandMap;
+import org.bukkit.enchantments.Enchantment;
+import org.bukkit.inventory.ItemFlag;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.lang.reflect.Field;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -24,11 +30,15 @@ public final class WorldBlocksAPI extends JavaPlugin {
     @Getter
     private BungeeHandler bungeeHandler;
 
+    private static WorldBlocksAPI instance;
+
     @Override
     public void onEnable() {
+        instance = this;
         saveDefaultConfig();
         Serialization.register(Item.class);
-        serverName = getConfig().getString("server-name");
+        Server.startTask();
+        this.serverName = getConfig().getString("server-name");
         this.bungeeHandler = new BungeeHandler();
         if (serverName == null || serverName.equalsIgnoreCase("unnamed")) {
             Bukkit.getLogger().severe(" ");
@@ -49,6 +59,11 @@ public final class WorldBlocksAPI extends JavaPlugin {
 
     }
 
+    @Override
+    public void onDisable() {
+        Server.killTask();
+    }
+
     public Module getModuleGeneric(Modules id) {
         return modules.get(id);
     }
@@ -64,7 +79,7 @@ public final class WorldBlocksAPI extends JavaPlugin {
     }
 
     public static WorldBlocksAPI getAPI() {
-        return (WorldBlocksAPI) Bukkit.getServer().getPluginManager().getPlugin("WorldblocksAPI");
+        return instance;
     }
 
     public DatabaseModule getDatabaseModule() {
@@ -87,5 +102,6 @@ public final class WorldBlocksAPI extends JavaPlugin {
             e.printStackTrace();
         }
     }
+
 
 }
