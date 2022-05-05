@@ -57,6 +57,9 @@ public final class WorldBlocksAPI extends JavaPlugin {
         instantiateDefaultModules();
         getRedisModule().instantiate(this);
 
+        getDatabaseModule();
+        SQLClient client = SQLModule.getClient();
+        client.createTable("worldblocks_players", new PostgresColumn("uuid", PostgresType.UUID), new PostgresColumn("data", PostgresType.JSON));
     }
 
     @Override
@@ -74,7 +77,7 @@ public final class WorldBlocksAPI extends JavaPlugin {
     }
 
     public void instantiateDefaultModules() {
-        instantiateModule(Modules.DATABASES, new DatabaseModule());
+        instantiateModule(Modules.DATABASES, new SQLModule());
         instantiateModule(Modules.REDIS, new RedisModule());
     }
 
@@ -82,8 +85,8 @@ public final class WorldBlocksAPI extends JavaPlugin {
         return instance;
     }
 
-    public DatabaseModule getDatabaseModule() {
-        return (DatabaseModule) modules.get(Modules.DATABASES);
+    public SQLModule getDatabaseModule() {
+        return (SQLModule) modules.get(Modules.DATABASES);
     }
 
     public RedisModule getRedisModule() {
