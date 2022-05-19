@@ -58,8 +58,16 @@ public final class WorldBlocksAPI extends JavaPlugin {
         getRedisModule().instantiate(this);
 
         getDatabaseModule();
-        SQLClient client = SQLModule.getClient();
-        client.createTable("worldblocks_players", new PostgresColumn("uuid", PostgresType.UUID), new PostgresColumn("data", PostgresType.JSON));
+
+        // Database
+        String ip = "localhost";
+        String dbName = "worldblocks";
+        String user = "postgres";
+        String pass = "MUixjs.cHqa7feaZsNsFEkm6L";
+        int port = 5432;
+
+        SQLModule.instantiateClient(ip, port, dbName, user, pass);
+        SQLModule.getClient().createTable("worldblocks_players", new PostgresColumn("uuid", PostgresType.UUID), new PostgresColumn("data", PostgresType.JSON));
     }
 
     @Override
