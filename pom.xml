@@ -18,6 +18,14 @@
     </properties>
     <url>www.worldblocks.net</url>
 
+    <distributionManagement>
+        <repository>
+            <id>github</id>
+            <name>GitHub OWNER Apache Maven Packages</name>
+            <url>https://maven.pkg.github.com/Worldblocksnft/WorldBlocksAPI</url>
+        </repository>
+    </distributionManagement>
+
     <build>
         <plugins>
             <plugin>
@@ -48,7 +56,7 @@
         </plugins>
         <resources>
             <resource>
-                <directory>src/main/resources</directory>
+                <directory>../src/main/resources</directory>
                 <filtering>true</filtering>
             </resource>
         </resources>

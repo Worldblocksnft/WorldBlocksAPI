@@ -1,0 +1,19 @@
+{
+  "name": "@worldblocksnft/worldblocksapi",
+  "version": "1.0.0",
+  "description": "[![](https://jitpack.io/v/Worldblocksnft/WorldBlocksAPI.svg)](https://jitpack.io/#Worldblocksnft/WorldBlocksAPI) \\\r The official worldblocks API for spigot plugins.",
+  "main": "index.js",
+  "scripts": {
+    "test": "exit 0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Worldblocksnft/WorldBlocksAPI.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Worldblocksnft/WorldBlocksAPI/issues"
+  },
+  "homepage": "https://github.com/Worldblocksnft/WorldBlocksAPI#readme"
+}
