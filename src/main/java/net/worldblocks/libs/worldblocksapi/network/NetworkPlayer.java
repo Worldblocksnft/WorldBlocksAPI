@@ -9,8 +9,6 @@ public interface NetworkPlayer {
 
     String getServerName();
 
-    boolean isOnline();
-
     void sendMessage(String message);
 
     void sendTitle(String header, String footer);

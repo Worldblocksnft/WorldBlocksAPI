@@ -6,6 +6,8 @@ import net.worldblocks.libs.worldblocksapi.command.AbstractCommand;
 import net.worldblocks.libs.worldblocksapi.configuration.Serialization;
 import net.worldblocks.libs.worldblocksapi.databases.*;
 import net.worldblocks.libs.worldblocksapi.item.Item;
+import net.worldblocks.libs.worldblocksapi.network.redis.Redis;
+import net.worldblocks.libs.worldblocksapi.network.redis.RedisImpl;
 import net.worldblocks.libs.worldblocksapi.redis.RedisModule;
 import net.worldblocks.libs.worldblocksapi.server.Server;
 import net.worldblocks.libs.worldblocksapi.utilities.Pair;
@@ -30,6 +32,9 @@ public final class WorldBlocksAPI extends JavaPlugin {
     @Getter
     private BungeeHandler bungeeHandler;
 
+    @Getter
+    private Redis redis;
+
     private static WorldBlocksAPI instance;
 
     @Override
@@ -38,6 +43,7 @@ public final class WorldBlocksAPI extends JavaPlugin {
         saveDefaultConfig();
         Serialization.register(Item.class);
         Server.startTask();
+        this.redis = new RedisImpl(getConfig());
         this.serverName = getConfig().getString("server-name");
         this.bungeeHandler = new BungeeHandler();
         if (serverName == null || serverName.equalsIgnoreCase("unnamed")) {
