@@ -1,10 +1,18 @@
 package net.worldblocks.libs.worldblocksapi.network.redis;
 
+import net.worldblocks.libs.worldblocksapi.WorldBlocksAPI;
+import net.worldblocks.libs.worldblocksapi.network.NetworkPlayer;
+import net.worldblocks.libs.worldblocksapi.network.NetworkPlayerImpl;
 import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.entity.Player;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 import redis.clients.jedis.Jedis;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
 
 public class RedisImpl implements Redis {
     private final Jedis jedis;
@@ -48,8 +56,37 @@ public class RedisImpl implements Redis {
     }
 
     @Override
+    public NetworkPlayer getNetworkPlayer(UUID uuid) {
+        JSONObject jsonObject = getJsonObject(uuid.toString());
+        String name = jsonObject.get("name").toString();
+
+        return new NetworkPlayerImpl(name, uuid);
+    }
+
+    @Override
+    public void addToCache(String key, JSONObject jsonObject) {
+        jedis.set(key, jsonObject.toJSONString());
+    }
+
+    @Override
     public void addToCache(String key, String value) {
         jedis.set(key, value);
+    }
+
+    @Override
+    public void addToCache(Player player) {
+        Map<String, String> jsonMap = new HashMap<>();
+        String uuid = player.getUniqueId().toString();
+
+        jsonMap.put("uuid", uuid);
+        jsonMap.put("name", player.getName());
+
+        addToCache(uuid, new JSONObject(jsonMap));
+    }
+
+    @Override
+    public void removeFromCache(Player player) {
+        removeFromCache(player.getUniqueId().toString());
     }
 
     @Override
