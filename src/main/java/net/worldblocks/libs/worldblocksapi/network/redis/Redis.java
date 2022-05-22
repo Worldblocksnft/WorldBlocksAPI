@@ -5,7 +5,9 @@ import redis.clients.jedis.Jedis;
 public interface Redis {
     Jedis getJedis();
 
+    String get(String key);
+
     void addToCache(String key, String value);
 
-    void removeFromCache();
+    void removeFromCache(String key);
 }
