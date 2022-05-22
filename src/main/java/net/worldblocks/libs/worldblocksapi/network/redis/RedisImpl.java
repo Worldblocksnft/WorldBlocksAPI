@@ -14,11 +14,11 @@ public class RedisImpl implements Redis {
 
         this.jedis = new Jedis("redis://" + ip + ":" + port + "/" + db);
 
-        // Authentication & Login
-        if (!user.equalsIgnoreCase("") && !pass.equalsIgnoreCase(""))
-            this.jedis.auth(user, pass);
-        if (!pass.equalsIgnoreCase("") && user.equalsIgnoreCase(""))
-            this.jedis.auth(pass);
+        if (user != null && !user.isEmpty()) {
+            jedis.auth(user, pass);
+        } else {
+            jedis.auth(pass);
+        }
     }
 
     @Override
