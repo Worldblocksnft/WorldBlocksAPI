@@ -6,6 +6,7 @@ import org.bukkit.entity.Player;
 import org.json.simple.JSONObject;
 import redis.clients.jedis.Jedis;
 
+import java.util.Optional;
 import java.util.UUID;
 
 public interface Redis {
@@ -15,7 +16,7 @@ public interface Redis {
 
     JSONObject getJsonObject(String key);
 
-    NetworkPlayer getNetworkPlayer(UUID uuid);
+    Optional<NetworkPlayer> getNetworkPlayer(UUID uuid);
 
     void addToCache(String key, JSONObject jsonObject);
 

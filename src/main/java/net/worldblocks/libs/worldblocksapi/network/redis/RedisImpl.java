@@ -12,6 +12,7 @@ import redis.clients.jedis.Jedis;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 import java.util.UUID;
 
 public class RedisImpl implements Redis {
@@ -56,11 +57,16 @@ public class RedisImpl implements Redis {
     }
 
     @Override
-    public NetworkPlayer getNetworkPlayer(UUID uuid) {
-        JSONObject jsonObject = getJsonObject(uuid.toString());
-        String name = jsonObject.get("name").toString();
+    public Optional<NetworkPlayer> getNetworkPlayer(UUID uuid) {
+        String key = uuid.toString();
 
-        return new NetworkPlayerImpl(name, uuid);
+        if (jedis.exists(key)) {
+            JSONObject jsonObject = getJsonObject(key);
+            String name = jsonObject.get("name").toString();
+            return Optional.of(new NetworkPlayerImpl(name, uuid));
+        } else {
+            return Optional.empty();
+        }
     }
 
     @Override
