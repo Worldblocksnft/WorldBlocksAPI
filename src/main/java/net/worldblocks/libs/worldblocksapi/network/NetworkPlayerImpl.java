@@ -1,17 +1,16 @@
 package net.worldblocks.libs.worldblocksapi.network;
 
 import net.worldblocks.libs.worldblocksapi.WorldBlocksAPI;
-import org.json.simple.JSONObject;
 
 import java.util.UUID;
 
 public class NetworkPlayerImpl implements NetworkPlayer {
     private final String name;
     private final UUID uuid;
-    public NetworkPlayerImpl(UUID uuid) {
-        JSONObject jsonObject = WorldBlocksAPI.getAPI().getRedis().getJsonObject(uuid.toString());
-        this.name = jsonObject.get("name").toString();
-        this.uuid = UUID.fromString(jsonObject.get("uuid").toString());
+
+    public NetworkPlayerImpl(String name, UUID uuid) {
+        this.name = name;
+        this.uuid = uuid;
     }
 
     @Override

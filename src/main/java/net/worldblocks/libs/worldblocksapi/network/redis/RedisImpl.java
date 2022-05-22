@@ -38,12 +38,13 @@ public class RedisImpl implements Redis {
     public JSONObject getJsonObject(String key) {
         if (key != null) {
             try {
-                return (org.json.simple.JSONObject) new JSONParser().parse(key);
+                String value = get(key);
+                return (JSONObject) new JSONParser().parse(value);
             } catch (ParseException e) {
                 e.printStackTrace();
             }
         }
-        return new org.json.simple.JSONObject();
+        return new JSONObject();
     }
 
     @Override
