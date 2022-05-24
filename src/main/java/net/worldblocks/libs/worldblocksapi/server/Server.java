@@ -25,7 +25,7 @@ public enum Server {
 
 
     public static void startTask() {
-        TASK = Bukkit.getScheduler().scheduleSyncRepeatingTask(WorldBlocksAPI.getAPI(), Server::update, 100, 100);
+        TASK = Bukkit.getScheduler().scheduleSyncRepeatingTask(WorldBlocksAPI.getInstance(), Server::update, 100, 100);
     }
 
     public static void killTask() {
@@ -33,7 +33,7 @@ public enum Server {
     }
 
     private static void update() {
-        Bukkit.getScheduler().runTaskAsynchronously(WorldBlocksAPI.getAPI(), () -> {
+        Bukkit.getScheduler().runTaskAsynchronously(WorldBlocksAPI.getInstance(), () -> {
             for (Server server : Server.values()) {
                 try {
                     Socket socket = new Socket("localhost", server.port);

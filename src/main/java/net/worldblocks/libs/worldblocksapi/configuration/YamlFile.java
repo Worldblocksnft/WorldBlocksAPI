@@ -1,4 +1,4 @@
-package net.worldblocks.libs.worldblocksapi.configuration.yaml;
+package net.worldblocks.libs.worldblocksapi.configuration;
 
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.Plugin;
@@ -12,11 +12,8 @@ public class YamlFile {
     private final String path;
     private final String folder;
     private final Plugin plugin;
-
     private final File cFile;
-
     private final YamlConfiguration config;
-
 
     public void saveConfig() {
         try {

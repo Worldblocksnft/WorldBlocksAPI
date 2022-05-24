@@ -1,6 +1,5 @@
 package net.worldblocks.libs.worldblocksapi.network.redis;
 
-import net.worldblocks.libs.worldblocksapi.network.Network;
 import net.worldblocks.libs.worldblocksapi.network.NetworkPlayer;
 import org.bukkit.entity.Player;
 import org.json.simple.JSONObject;

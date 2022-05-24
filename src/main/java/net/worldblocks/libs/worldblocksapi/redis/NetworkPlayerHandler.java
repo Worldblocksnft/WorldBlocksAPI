@@ -7,8 +7,6 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -16,14 +14,14 @@ import java.util.UUID;
 
 public class NetworkPlayerHandler implements Listener {
 
-    private final RedisClient redisClient;
+    private final RedisClientLegacy redisClientLegacy;
     private final String namespace = "networkplayer";
     @Setter private int timeout;
     private HashMap<UUID, NetworkPlayer> playerMap = new HashMap<>();
     private HashSet<NetworkPlayer> playerSet = new HashSet<>();
 
-    public NetworkPlayerHandler(RedisClient redisClient) {
-        this.redisClient = redisClient;
+    public NetworkPlayerHandler(RedisClientLegacy redisClientLegacy) {
+        this.redisClientLegacy = redisClientLegacy;
         this.timeout = 86400;
     }
 
@@ -32,10 +30,10 @@ public class NetworkPlayerHandler implements Listener {
         Player player = e.getPlayer();
         UUID uuid = player.getUniqueId();
         long currentUnix = System.currentTimeMillis();
-        String currentServer = WorldBlocksAPI.getAPI().getServerName();
+        String currentServer = WorldBlocksAPI.getInstance().getWbConfig().getServerName();
         NetworkPlayer networkPlayer = new NetworkPlayer(uuid, player.getName(), currentServer, currentUnix);
 
-        this.redisClient.addToCache(namespace, uuid.toString(), networkPlayer.toJson(), this.timeout);
+        this.redisClientLegacy.addToCache(namespace, uuid.toString(), networkPlayer.toJson(), this.timeout);
     }
 
     /*
@@ -55,12 +53,12 @@ public class NetworkPlayerHandler implements Listener {
      */
     public HashSet<NetworkPlayer> getPlayerSet() {
         playerSet.clear();
-        for (String s : redisClient.getJedis().keys("*")) {
+        for (String s : redisClientLegacy.getJedis().keys("*")) {
             if (s.startsWith(namespace + ":")) {
                 try {
                     UUID uuid = UUID.fromString(s.split((namespace + ":"))[1]);
                     if (uuid != null) {
-                        String json = redisClient.getJedis().get(namespace + ":" + uuid.toString());
+                        String json = redisClientLegacy.getJedis().get(namespace + ":" + uuid.toString());
                         if (json != null) {
                             NetworkPlayer networkPlayer = new NetworkPlayer(json);
                             playerSet.add(networkPlayer);

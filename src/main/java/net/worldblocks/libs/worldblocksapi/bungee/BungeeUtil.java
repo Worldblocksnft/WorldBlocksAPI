@@ -27,7 +27,7 @@ public class BungeeUtil {
         ByteArrayDataOutput output = ByteStreams.newDataOutput();
         output.writeUTF("Connect");
         output.writeUTF(serverName);
-        player.sendPluginMessage(WorldBlocksAPI.getAPI(), "BungeeCord", output.toByteArray());
+        player.sendPluginMessage(WorldBlocksAPI.getInstance(), "BungeeCord", output.toByteArray());
     }
 
     public void send(String target, String server) {
@@ -37,20 +37,20 @@ public class BungeeUtil {
         output.writeUTF("ConnectOther");
         output.writeUTF(target);
         output.writeUTF(server);
-        player.sendPluginMessage(WorldBlocksAPI.getAPI(), "BungeeCord", output.toByteArray());
+        player.sendPluginMessage(WorldBlocksAPI.getInstance(), "BungeeCord", output.toByteArray());
     }
 
     public CompletableFuture<String> getServer() {
         Player player = getFirstPlayer();
         CompletableFuture<String> future = new CompletableFuture<>();
 
-        synchronized (WorldBlocksAPI.getAPI().getBungeeHandler().getCallbackMap()) {
+        synchronized (WorldBlocksAPI.getInstance().getBungeeHandler().getCallbackMap()) {
             bungeeHandler.compute("GetServer", future);
         }
 
         ByteArrayDataOutput output = ByteStreams.newDataOutput();
         output.writeUTF("GetServer");
-        player.sendPluginMessage(WorldBlocksAPI.getAPI(), "BungeeCord", output.toByteArray());
+        player.sendPluginMessage(WorldBlocksAPI.getInstance(), "BungeeCord", output.toByteArray());
         return future;
     }
 
@@ -63,7 +63,7 @@ public class BungeeUtil {
 
         ByteArrayDataOutput output = ByteStreams.newDataOutput();
         output.writeUTF("IP");
-        player.sendPluginMessage(WorldBlocksAPI.getAPI(), "BungeeCord", output.toByteArray());
+        player.sendPluginMessage(WorldBlocksAPI.getInstance(), "BungeeCord", output.toByteArray());
         return future;
     }
 

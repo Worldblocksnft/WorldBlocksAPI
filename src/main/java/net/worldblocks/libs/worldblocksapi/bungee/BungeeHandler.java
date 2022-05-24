@@ -3,7 +3,6 @@ package net.worldblocks.libs.worldblocksapi.bungee;
 import com.google.common.io.ByteArrayDataInput;
 import com.google.common.io.ByteStreams;
 import lombok.Getter;
-import lombok.Setter;
 import net.worldblocks.libs.worldblocksapi.WorldBlocksAPI;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -24,11 +23,10 @@ public class BungeeHandler implements PluginMessageListener {
 
     public BungeeHandler() {
         this.callbackMap = new HashMap<>();
-        Bukkit.getServer().getMessenger().registerOutgoingPluginChannel(WorldBlocksAPI.getAPI(), "BungeeCord");
-        Bukkit.getServer().getMessenger().registerIncomingPluginChannel(WorldBlocksAPI.getAPI(), "BungeeCord", this);
+        Bukkit.getServer().getMessenger().registerOutgoingPluginChannel(WorldBlocksAPI.getInstance(), "BungeeCord");
+        Bukkit.getServer().getMessenger().registerIncomingPluginChannel(WorldBlocksAPI.getInstance(), "BungeeCord", this);
         BungeeUtil.setBungeeHandler(this);
     }
-
 
     @Override
     public void onPluginMessageReceived(String channel, Player player, byte[] message) {

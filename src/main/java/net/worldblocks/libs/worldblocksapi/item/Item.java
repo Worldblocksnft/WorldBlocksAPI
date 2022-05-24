@@ -3,7 +3,7 @@ package net.worldblocks.libs.worldblocksapi.item;
 import lombok.Builder;
 import lombok.Getter;
 import net.worldblocks.libs.worldblocksapi.configuration.Serializable;
-import net.worldblocks.libs.worldblocksapi.configuration.yaml.YamlFile;
+import net.worldblocks.libs.worldblocksapi.configuration.YamlFile;
 import net.worldblocks.libs.worldblocksapi.utilities.ColorUtils;
 import net.worldblocks.libs.worldblocksapi.utilities.Pair;
 import net.worldblocks.libs.worldblocksapi.utilities.Placeholder;

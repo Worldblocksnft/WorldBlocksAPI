@@ -25,7 +25,7 @@ public class NetworkPlayerImpl implements NetworkPlayer {
 
     @Override
     public String getServerName() {
-        return WorldBlocksAPI.getAPI().getServerName();
+        return WorldBlocksAPI.getInstance().getWbConfig().getServerName();
     }
 
     @Override

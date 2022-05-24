@@ -1,6 +1,5 @@
 package net.worldblocks.libs.worldblocksapi.configuration;
 
-import net.worldblocks.libs.worldblocksapi.configuration.yaml.YamlFile;
 import net.worldblocks.libs.worldblocksapi.item.Item;
 import org.bukkit.configuration.file.YamlConfiguration;
 

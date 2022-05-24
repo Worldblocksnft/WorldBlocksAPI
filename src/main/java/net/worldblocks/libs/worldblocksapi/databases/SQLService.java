@@ -1,14 +1,19 @@
 package net.worldblocks.libs.worldblocksapi.databases;
 
-import net.worldblocks.libs.worldblocksapi.Module;
-import org.bukkit.plugin.java.JavaPlugin;
+import net.worldblocks.libs.worldblocksapi.Service;
+import net.worldblocks.libs.worldblocksapi.configuration.WBConfig;
 
-public class SQLModule implements Module {
+public class SQLService implements Service {
 
     private static SQLClient client;
 
     @Override
-    public void instantiate(JavaPlugin plugin) {}
+    public void init(WBConfig config) {}
+
+    @Override
+    public boolean isInitialized() {
+        return client != null;
+    }
 
     public static void instantiateClient(String host, int port, String database, String username, String password) {
         client = new SQLClient(host, port, database, username, password);
@@ -30,4 +35,7 @@ public class SQLModule implements Module {
         return client;
     }
 
+    @Override
+    public void close() {
+    }
 }

@@ -1,6 +1,5 @@
 package net.worldblocks.libs.worldblocksapi.redis;
 
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -12,8 +11,8 @@ import java.util.UUID;
 
 public class RedisEventListener implements Listener {
 
-    private RedisModule redisModule;
-    public RedisEventListener(RedisModule redisModule) {
+    private RedisService redisModule;
+    public RedisEventListener(RedisService redisModule) {
         this.redisModule = redisModule;
     }
 
@@ -25,12 +24,12 @@ public class RedisEventListener implements Listener {
 
         System.out.println("Player Message: " + message);
 
-        if (redisModule.hasRedisClient()) {
-            Bukkit.getScheduler().runTaskLater(redisModule.getPlugin(), () -> {
-                RedisClient client = redisModule.getRedisClient();
-                client.sendPlayerMessage(uuid, "playermessage", message);
-            }, 1L);
-        }
+//        if (redisModule.hasRedisClient()) {
+//            Bukkit.getScheduler().runTaskLater(redisModule.getPlugin(), () -> {
+//                RedisClientLegacy client = redisModule.getRedisClientLegacy();
+//                client.sendPlayerMessage(uuid, "playermessage", message);
+//            }, 1L);
+//        }
     }
 
     @EventHandler

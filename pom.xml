@@ -11,12 +11,12 @@
 
     <name>WorldBlocksAPI</name>
 
-    <description>An all-in-one API for Worldblocks spigot plugins.</description>
+    <description>An all-in-one API for WorldBlocks spigot plugins.</description>
     <properties>
-        <java.version>1.8</java.version>
+        <java.version>17</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
-    <url>www.worldblocks.net</url>
+    <url>worldblocks.world</url>
 
     <distributionManagement>
         <repository>
@@ -74,6 +74,29 @@
     </repositories>
 
     <dependencies>
+        <!-- BEGIN TEST DEPENDENCIES -->
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter</artifactId>
+            <version>5.8.2</version>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-core</artifactId>
+            <version>4.5.1</version>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-junit-jupiter</artifactId>
+            <version>4.5.1</version>
+            <scope>test</scope>
+        </dependency>
+        <!-- END TEST DEPENDENCIES-->
+
         <dependency>
             <groupId>org.spigotmc</groupId>
             <artifactId>spigot-api</artifactId>

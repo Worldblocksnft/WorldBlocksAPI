@@ -22,14 +22,20 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-public class RedisClient {
+public class RedisClientLegacy {
 
-    @Getter private Jedis jedis;
+    @Getter
+    private Jedis jedis;
     private UUID serverUUID;
     private Plugin plugin;
-    @Getter private NetworkPlayerHandler networkPlayerHandler;
-    @Getter @Setter private int ttl = 120;
-    @Getter @Setter private int playerMessageTtl = 10;
+    @Getter
+    private NetworkPlayerHandler networkPlayerHandler;
+    @Getter
+    @Setter
+    private int ttl = 120;
+    @Getter
+    @Setter
+    private int playerMessageTtl = 10;
     private final String namespace = "worldblocksmessaging";
     private boolean isEnabled = false;
     private final String ip;
@@ -39,7 +45,7 @@ public class RedisClient {
     private final String pass;
     private boolean useBukkitEvents;
 
-    public RedisClient(Plugin plugin) {
+    public RedisClientLegacy(Plugin plugin) {
         this.plugin = plugin;
         this.useBukkitEvents = false;
 
@@ -75,7 +81,7 @@ public class RedisClient {
         Bukkit.getPluginManager().registerEvents(this.networkPlayerHandler, this.plugin);
     }
 
-    public RedisClient(Plugin plugin, boolean useBukkitEvents) {
+    public RedisClientLegacy(Plugin plugin, boolean useBukkitEvents) {
         this.plugin = plugin;
 
         //Load details from "plugins/WorldBlocksAPI/config.yml"
@@ -131,7 +137,7 @@ public class RedisClient {
             JSONObject entry = new JSONObject();
             entry.put("message", message);
             entry.put("received", received);
-            entry.put("origin-server", WorldBlocksAPI.getAPI().getServerName());
+            entry.put("origin-server", WorldBlocksAPI.getInstance().getWbConfig().getServerName());
             entry.put("uuid", player.getUniqueId().toString());
             nsObj.put(UUID.randomUUID(), entry);
             jsonObject.put(namespace, nsObj);
@@ -144,7 +150,7 @@ public class RedisClient {
             JSONObject entry = new JSONObject();
             entry.put("message", message);
             entry.put("received", received);
-            entry.put("origin-server", WorldBlocksAPI.getAPI().getServerName());
+            entry.put("origin-server", WorldBlocksAPI.getInstance().getWbConfig().getServerName());
             entry.put("uuid", player.getUniqueId().toString());
             nsObj.put(UUID.randomUUID(), entry);
             jsonObject.put(namespace, nsObj);
@@ -181,7 +187,7 @@ public class RedisClient {
             JSONObject entry = new JSONObject();
             entry.put("message", message);
             entry.put("received", received);
-            entry.put("origin-server", WorldBlocksAPI.getAPI().getServerName());
+            entry.put("origin-server", WorldBlocksAPI.getInstance().getWbConfig().getServerName());
             entry.put("uuid", uuid.toString());
             nsObj.put(UUID.randomUUID(), entry);
             jsonObject.put(namespace, nsObj);
@@ -195,7 +201,7 @@ public class RedisClient {
             JSONObject entry = new JSONObject();
             entry.put("message", message);
             entry.put("received", received);
-            entry.put("origin-server", WorldBlocksAPI.getAPI().getServerName());
+            entry.put("origin-server", WorldBlocksAPI.getInstance().getWbConfig().getServerName());
             entry.put("uuid", uuid.toString());
             nsObj.put(UUID.randomUUID(), entry);
             jsonObject.put(namespace, nsObj);
@@ -222,7 +228,7 @@ public class RedisClient {
             JSONObject entry = new JSONObject();
             entry.put("message", message);
             entry.put("received", received);
-            entry.put("origin-server", WorldBlocksAPI.getAPI().getServerName());
+            entry.put("origin-server", WorldBlocksAPI.getInstance().getWbConfig().getServerName());
             nsObj.put(UUID.randomUUID(), entry);
             jsonObject.put(namespace, nsObj);
             jedis.set(this.namespace, jsonObject.toJSONString());
@@ -234,7 +240,7 @@ public class RedisClient {
             JSONObject entry = new JSONObject();
             entry.put("message", message);
             entry.put("received", received);
-            entry.put("origin-server", WorldBlocksAPI.getAPI().getServerName());
+            entry.put("origin-server", WorldBlocksAPI.getInstance().getWbConfig().getServerName());
             nsObj.put(UUID.randomUUID(), entry);
             jsonObject.put(namespace, nsObj);
             jedis.set(this.namespace, jsonObject.toJSONString());

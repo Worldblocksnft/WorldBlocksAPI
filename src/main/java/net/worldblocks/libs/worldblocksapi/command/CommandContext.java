@@ -7,7 +7,6 @@ import org.bukkit.command.CommandSender;
 @Getter
 @AllArgsConstructor
 public class CommandContext {
-
     private CommandSender commandSender;
     private String[] args;
     private String label;

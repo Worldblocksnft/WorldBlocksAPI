@@ -1,110 +1,97 @@
 package net.worldblocks.libs.worldblocksapi;
 
+import com.google.common.base.Strings;
 import lombok.Getter;
 import net.worldblocks.libs.worldblocksapi.bungee.BungeeHandler;
 import net.worldblocks.libs.worldblocksapi.command.AbstractCommand;
-import net.worldblocks.libs.worldblocksapi.configuration.Serialization;
-import net.worldblocks.libs.worldblocksapi.databases.*;
-import net.worldblocks.libs.worldblocksapi.item.Item;
-import net.worldblocks.libs.worldblocksapi.network.redis.Redis;
-import net.worldblocks.libs.worldblocksapi.network.redis.RedisImpl;
-import net.worldblocks.libs.worldblocksapi.redis.RedisModule;
+import net.worldblocks.libs.worldblocksapi.configuration.WBConfig;
+import net.worldblocks.libs.worldblocksapi.databases.SQLService;
+import net.worldblocks.libs.worldblocksapi.redis.RedisService;
 import net.worldblocks.libs.worldblocksapi.server.Server;
-import net.worldblocks.libs.worldblocksapi.utilities.Pair;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandMap;
-import org.bukkit.enchantments.Enchantment;
-import org.bukkit.inventory.ItemFlag;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.lang.reflect.Field;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
 public final class WorldBlocksAPI extends JavaPlugin {
 
-    private Map<Modules, Module> modules = new HashMap<>();
     @Getter
-    private String serverName;
-
+    private static WorldBlocksAPI instance;
+    private Map<IService, Service> services = new HashMap<>();
+    @Getter
+    public WBConfig wbConfig;
     @Getter
     private BungeeHandler bungeeHandler;
-
-    @Getter
-    private Redis redis;
-
-    private static WorldBlocksAPI instance;
 
     @Override
     public void onEnable() {
         instance = this;
+
+        // Configuration
         saveDefaultConfig();
-        Serialization.register(Item.class);
-        Server.startTask();
-        this.redis = new RedisImpl(getConfig());
-        this.serverName = getConfig().getString("server-name");
-        this.bungeeHandler = new BungeeHandler();
-        if (serverName == null || serverName.equalsIgnoreCase("unnamed")) {
-            Bukkit.getLogger().severe(" ");
-            Bukkit.getLogger().severe(" ");
-            Bukkit.getLogger().severe(" ");
-            Bukkit.getLogger().severe(" ");
-            Bukkit.getLogger().severe("[WorldblocksAPI] You must insert a name for your server to use in redis.");
-            Bukkit.getLogger().severe(" ");
-            Bukkit.getLogger().severe(" ");
-            Bukkit.getLogger().severe(" ");
-            Bukkit.getLogger().severe(" ");
+        this.wbConfig = new WBConfig(instance, this.getConfig());
+
+        if (Strings.isNullOrEmpty(wbConfig.getServerName()) || wbConfig.getServerName().equalsIgnoreCase("unnamed")) {
+            Bukkit.getLogger().severe("[WorldBlocksAPI] You must insert a name for your server to use in redis.");
             Bukkit.shutdown();
             return;
         }
 
-        instantiateDefaultModules();
-        getRedisModule().instantiate(this);
+        initDefaultModules();
 
-        getDatabaseModule();
+//        this.bungeeHandler = new BungeeHandler();
 
-        // Database
-        String ip = "localhost";
-        String dbName = "worldblocks";
-        String user = "postgres";
-        String pass = "MUixjs.cHqa7feaZsNsFEkm6L";
-        int port = 5432;
+//        // Database
+//        String ip = "localhost";
+//        String dbName = "worldblocks";
+//        String user = "postgres";
+//        String pass = "MUixjs.cHqa7feaZsNsFEkm6L";
+//        int port = 5432;
 
-        SQLModule.instantiateClient(ip, port, dbName, user, pass);
-        SQLModule.getClient().createTable("worldblocks_players", new PostgresColumn("uuid", PostgresType.UUID), new PostgresColumn("data", PostgresType.JSON));
+//        SQLModule.instantiateClient(ip, port, dbName, user, pass);
+//        SQLModule.getClient().createTable("worldblocks_players", new PostgresColumn("uuid", PostgresType.UUID), new PostgresColumn("data", PostgresType.JSON));
+
+        Server.startTask();
     }
 
     @Override
     public void onDisable() {
+
+        // Close service connections
+        this.services.values().forEach(service -> {
+            try {
+                service.close();
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+        });
         Server.killTask();
+
     }
 
-    public Module getModuleGeneric(Modules id) {
-        return modules.get(id);
+    public Service getModule(IService id) {
+        return services.get(id);
     }
 
-    public void instantiateModule(Modules id, Module module) {
-        module.instantiate(this);
-        modules.put(id, module);
+    public void initModule(IService id, Service service) {
+        service.init(this.wbConfig);
+        services.put(id, service);
     }
 
-    public void instantiateDefaultModules() {
-        instantiateModule(Modules.DATABASES, new SQLModule());
-        instantiateModule(Modules.REDIS, new RedisModule());
+    public void initDefaultModules() {
+        initModule(IService.DATABASES, new SQLService());
+        initModule(IService.REDIS, new RedisService());
     }
 
-    public static WorldBlocksAPI getAPI() {
-        return instance;
+    public SQLService getDatabaseModule() {
+        return (SQLService) services.get(IService.DATABASES);
     }
 
-    public SQLModule getDatabaseModule() {
-        return (SQLModule) modules.get(Modules.DATABASES);
-    }
-
-    public RedisModule getRedisModule() {
-        return (RedisModule) modules.get(Modules.REDIS);
+    public RedisService getRedisModule() {
+        return (RedisService) services.get(IService.REDIS);
     }
 
     public void registerCommands(AbstractCommand... abstractCommands) {
