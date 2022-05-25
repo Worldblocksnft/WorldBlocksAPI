@@ -1,0 +1,7 @@
+name: WorldBlocksAPI
+version: '${project.version}'
+main: world.worldblocks.WorldBlocksSpigot
+api-version: 1.17
+authors: [ Baguette, CandyDev, CodePunisher, SudoSean ]
+description: An all-in-one API for Worldblocks spigot plugins.
+website: worldblocks.world

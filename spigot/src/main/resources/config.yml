@@ -1,0 +1,17 @@
+config-version: 1
+
+# Make this a unique name according to your server. Preferably the same name as in velocity.
+# The plugin will not boot when this is "unnamed", as this is used in some internal functions.
+server-name: unnamed
+
+# Redis Details
+redis:
+  ip: "localhost"
+  port: 6379
+  # For internal use, has to be a number (almost always 0)
+  db: 0
+  # Only used if the database has auth, leave blank if not.
+  user: ""
+  pass: ""
+
+# SQL details
